@@ -59,7 +59,10 @@ if yes?("Add authentication?")
     end
   CODE
 
+  run "bundle install"
+  generate('bower:tools:install')
+  
   rake "db:migrate"
-  run "touch tmp/restart.txt"
+  run "touch tmp/restart.txt"  
 end
 
