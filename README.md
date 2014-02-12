@@ -7,13 +7,25 @@ By default it will add the following gems, along with authentication stuff descr
 * haml          - simple view syntax
 * bower-tools   - some default configs to let bower work with rails easier.
 
+##How to use
+
+You will need to checkout the template repo to somewhere local
+
+    git clone https://github.com/gina-alaska/gina-rails-template.git
+    
+For a new rails application use
+    
+    rails new <ApplicationName> -m <path/to/gina-rails-template/gina-template.rb>
+    
+This can be [applied to an already existing application](http://edgeguides.rubyonrails.org/rails_application_templates.html) but use with care as several files are created that might conflict with existing code.  Where possible this has been handled using concerns so it should be possible to just add them to already existing controllers/models
+
 ##Authentication Configuration
 
 This template will ask if you wish to add authentication support, this will add necessary omniauth gems to you Gemfile and create several controllers and models.
 
 The following providers are supported
 
-* http://id.gina.alaska.edu (openid)
+* GINA::ID (OpenID) - http://id.gina.alaska.edu
 * Google (OAuth2) - disabled by default since it requires ENV variables to properly work
 * Github (OAuth2/Github) - disabled by default since it requires additional ENV variables to properly work
 
