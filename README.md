@@ -2,6 +2,15 @@
 
 This is the start of a basic rails template.
 
+There are 3 main actions that it will perform
+
+* basic gem and git configuration for a new application
+  * Adds haml and bower-tools gems
+  * Installs bootstrap and font-awesome js libs and adds them to the application.{js|css} manifest files
+* add authentication (optional)
+  * Creates a couple of controllers, models and some views that can be used to help 
+* create cookbook (optional)
+
 By default it will add the following gems, along with authentication stuff described later on
 
 * haml          - simple view syntax
@@ -42,12 +51,16 @@ After registering your application you can edit the <code>config/initializers/om
 
 ### Routes
 
-The following routes are create:
+The following routes are added:
 
-* /auth/:provider     # examples: /auth/gina, auth/google or auth/github
-* /auth/failure => sessions#failure
+* get '/auth/:provider/disable', to: 'users#disable_provider'
+* post '/auth/:provider/callback', to: 'sessions#create'
+* get '/auth/:provider/callback', to: 'sessions#create'
+* get '/auth/failure', to: 'sessions#failure'
+* get '/login', to: 'sessions#new'
+* get '/logout', to: 'sessions#destroy'
 * resources :users
-* resources :authorizations
+* resources :sessions
 * resources :memberships
 
 ### Included Helpers/Filters
@@ -76,3 +89,23 @@ If everything has been configured correctly you should be able to point your bro
 
 If you are using pow create a .powenv file in the rails root directory and then <code>touch tmp/restart.txt</code>.  Be sure to add the .powenv to your .gitignore to prevent your key/secret information from being exposed to other users.
 
+## Cookbook Instructions
+
+You will need to have <code>test-kitchen, berkshelf and vagrant</code> installed and running in order to use the automatic cookbook creation template.  The default recipes will create a system with nginx, ruby, bundler and unicorn to host an application.
+
+It will create a new folder called <APP_NAME>-cookbook in the current directory with all of the receipes and template files for starting a vm
+
+### Starting the VM
+
+Just run the following command to start the vm
+
+    cd <APP_NAME>-cookbook
+    kitchen converge centos
+
+Once that has completed successfully you can login using
+
+    kitchen login centos
+
+After confirming the VM starts and is configured correctly upload to chef using
+
+    berks upload

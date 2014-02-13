@@ -1,0 +1,8 @@
+{
+  "id": "postgres",
+  "uid": 5105,
+  "home": "/home/postgres",
+  "shell": "/bin/bash",
+  "comment": "Postgresql",
+  "admin": false
+}

@@ -1,0 +1,8 @@
+{
+  "id": "dba",
+  "uid": 2000,
+  "home": "/home/dba",
+  "shell": "/bin/bash",
+  "comment": "Database Administrator",
+  "admin": false
+}

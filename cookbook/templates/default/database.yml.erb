@@ -1,0 +1,25 @@
+production:
+  adapter: <%= @adapter %>
+  database: <%= @database %>
+  username: <%= @username %>
+  password: <%= @password %>
+  schema_search_path: <%= @search_path %>
+  host: <%= @hostname %>
+  client_encoding: UTF8
+  
+development:
+  adapter: <%= @adapter %>
+  database: <%= @database %>
+  username: <%= @username %>
+  password: <%= @password %>
+  schema_search_path: <%= @search_path %>
+  host: <%= @hostname %>
+  client_encoding: UTF8
+  
+test:
+  adapter: postgis
+  database: nssi_test
+  username: nssi_dev
+  schema_search_path: nssi_test,public
+  host: localhost
+  port: 5434
