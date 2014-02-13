@@ -11,11 +11,6 @@ There are 3 main actions that it will perform
   * Creates a couple of controllers, models and some views that can be used to help 
 * create cookbook (optional)
 
-By default it will add the following gems, along with authentication stuff described later on
-
-* haml          - simple view syntax
-* bower-tools   - some default configs to let bower work with rails easier.
-
 ##How to use
 
 You will need to checkout the template repo to somewhere local
@@ -93,7 +88,7 @@ If you are using pow create a .powenv file in the rails root directory and then 
 
 You will need to have <code>test-kitchen, berkshelf and vagrant</code> installed and running in order to use the automatic cookbook creation template.  The default recipes will create a system with nginx, ruby, bundler and unicorn to host an application.
 
-It will create a new folder called <APP_NAME>-cookbook in the current directory with all of the receipes and template files for starting a vm
+It will create a new folder called &lt;APP_NAME&gt;-cookbook in the current directory with all of the receipes and template files for starting a vm
 
 ### Starting the VM
 
