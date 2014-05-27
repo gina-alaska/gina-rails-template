@@ -1,11 +1,17 @@
+def source_paths
+  [File.expand_path(File.dirname(__FILE__))]
+end
+
 # used for template files
 def secret_key
   SecureRandom.hex(64)
 end
 
 def application_name
-  ARGV[0]
+  File.basename(Dir.pwd)
 end
+
+
 
 run "berks cookbook #{application_name}-cookbook --chef-minitest"
 directory "cookbook", "#{application_name}-cookbook"

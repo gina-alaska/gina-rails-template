@@ -1,3 +1,7 @@
+def source_paths
+  [File.expand_path(File.dirname(__FILE__))]
+end
+
 gem 'omniauth'
 gem 'omniauth-github'
 gem "omniauth-google-oauth2"
