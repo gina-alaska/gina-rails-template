@@ -1,5 +1,5 @@
-module GinaAuthentication do
-  module Users do
+module GinaAuthentication
+  module Users
     extend ActiveSupport::Concern
     
     included do
