@@ -17,11 +17,11 @@ default['<%= application_name %>']['paths'] = {
 }
 
 #Rails Database configuration
-default['<%= application_name %>']['database']['adapter']  = "DB_TYPE"
+default['<%= application_name %>']['database']['adapter']  = "postgresql"
 default['<%= application_name %>']['database']['hostname'] = "localhost"
 default['<%= application_name %>']['database']['database'] = "<%=application_name%>_prod"
 default['<%= application_name %>']['database']['username'] = "<%=application_name%>"
-default['<%= application_name %>']['database']['password'] = "DB_PASS"
+default['<%= application_name %>']['database']['password'] = "DBPASS"
 default['<%= application_name %>']['database']['search_path'] = "public"
 
 #Rails configuration
