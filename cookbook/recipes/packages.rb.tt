@@ -1,0 +1,7 @@
+app_name = "<%= application_name %>"
+
+node[app_name]['packages'].each do |pkg|
+  package pkg do
+    action :install
+  end
+end
