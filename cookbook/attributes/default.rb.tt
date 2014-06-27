@@ -1,37 +1,50 @@
-#  Assuming webapp might use this variable at some point.
 default['unicorn_config_path'] = '/etc/unicorn'
 
 default['<%= application_name %>']['account'] = "webdev"
+default['<%= application_name %>']['environment'] = "production"
+default['<%= application_name %>']['packages'] = Mash.new
 
-default['<%= application_name %>']['application_path'] = "/www/<%= application_name.underscore %>"
-default['<%= application_name %>']['shared_path'] = "#{default['<%= application_name %>']['application_path']}/shared"
-default['<%= application_name %>']['config_path'] = "#{default['<%= application_name %>']['shared_path']}/config"
-default['<%= application_name %>']['initializers_path'] = "#{default['<%= application_name %>']['config_path']}/initializers"
-default['<%= application_name %>']['deploy_path'] = "#{default['<%= application_name %>']['application_path']}/current"
+<% app_path = "/www/#{application_name}" %>
 
-# default['<%= application_name %>']['database']['adapter']  = "DB_TYPE"
-# default['<%= application_name %>']['database']['hostname'] = "DB_HOST"
-# default['<%= application_name %>']['database']['database'] = "DB_NAME"
-# default['<%= application_name %>']['database']['username'] = "DB_USER"
-# default['<%= application_name %>']['database']['password'] = "DB_PASS"
-# default['<%= application_name %>']['database']['search_path'] = "public"
+#Path configuration
+default['<%= application_name %>']['paths'] = {
+  application:   '<%= app_path %>',
+  deploy:        '<%= "#{app_path}/current"%>',
+  shared:        '<%= "#{app_path}/shared"%>',
+  config:        '<%= "#{app_path}/shared/config"%>',
+  initializers:  '<%= "#{app_path}/shared/config/initializers"%>',
+  public:        '<%= "#{app_path}/shared/public"%>',
+}
 
-default['<%= application_name %>']['sunspot']['hostname'] = "localhost"
-default['<%= application_name %>']['sunspot']['port'] = "8983"
+#Rails Database configuration
+default['<%= application_name %>']['database']['adapter']  = "postgresql"
+default['<%= application_name %>']['database']['hostname'] = "localhost"
+default['<%= application_name %>']['database']['database'] = "<%=application_name%>_prod"
+default['<%= application_name %>']['database']['username'] = "<%=application_name%>"
+default['<%= application_name %>']['database']['password'] = "DBPASS"
+default['<%= application_name %>']['database']['search_path'] = "public"
 
+#Rails configuration
 default['<%= application_name %>']['rails']['secret'] = '<%= secret_key %>'
 default['<%= application_name %>']['rails']['application_class_name'] = ''
-default['<%= application_name %>']['rails']['google_key'] = ""
-default['<%= application_name %>']['rails']['google_secret'] = ""
-default['<%= application_name %>']['rails']['github_key'] = ""
-default['<%= application_name %>']['rails']['github_secret'] = ""
+# default['<%= application_name %>']['rails']['google_key'] = ""
+# default['<%= application_name %>']['rails']['google_secret'] = ""
+# default['<%= application_name %>']['rails']['github_key'] = ""
+# default['<%= application_name %>']['rails']['github_secret'] = ""
 
-default['<%= application_name %>']['package_deps'] = %w{libicu-devel curl-devel libxml2-devel libxslt-devel nfs-utils ImageMagick-devel nodejs npm}
-
-default['<%= application_name %>']['before_fork'] = '
+#Unicorn configuration
+default['<%= application_name %>']['unicorn'] = {
+  preload_app: true,
+  config_path: '/etc/unicorn/<%=application_name%>.rb',
+  listen:      '<%="#{app_path}/shared/tmp/sockets"%>',
+  pid:         '<%="#{app_path}/shared/tmp/pids/unicorn.pid"%>',
+  stdout_path: '<%="#{app_path}/shared/log/unicorn.stdout.log"%>',
+  stderr_path: '<%="#{app_path}/shared/log/unicorn.stderr.log"%>',
+  working_directory: '<%="#{app_path}/current"%>',
+  before_fork: '
 defined?(ActiveRecord::Base) and
    ActiveRecord::Base.connection.disconnect!
-   
+
    old_pid = "#{server.config[:pid]}.oldbin"
    if old_pid != server.pid
      begin
@@ -40,16 +53,20 @@ defined?(ActiveRecord::Base) and
      rescue Errno::ENOENT, Errno::ESRCH
      end
    end
-      
-sleep 1
-'
 
-default['<%= application_name %>']['after_fork'] = "
+sleep 1
+  ',
+  after_fork: '
 defined?(ActiveRecord::Base) and
   ActiveRecord::Base.establish_connection
-"
+  '
+}
 
-default['users'] ||= []
-%w{ webdev }.each do |user|
-  default['users'] << user unless default['users'].include?(user)
-end
+#Database configuration
+override['postgresql']['enable_pgdg_yum'] = true
+override['postgresql']['version'] = "9.3"
+override['postgresql']['dir'] = '/var/lib/pgsql/9.3/data'
+override['postgresql']['client']['packages'] = %w{postgresql93 postgresql93-devel}
+override['postgresql']['server']['packages'] = %w{postgresql93-server}
+override['postgresql']['server']['service_name'] = 'postgresql-9.3'
+override['postgresql']['contrib']['packages'] = %w{postgresql93-contrib}

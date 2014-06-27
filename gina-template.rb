@@ -4,6 +4,7 @@ end
 
 gem "haml"
 gem "bower-tools", github: "gina-alaska/bower-tools"
+gem "pg"
 
 if yes?("Add authentication?")
   apply 'authentication.rb'
