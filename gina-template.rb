@@ -3,7 +3,7 @@ def source_paths
 end
 
 gem "haml"
-gem "bower-tools", github: "gina-alaska/bower-tools"
+gem "bower-rails"
 gem "pg"
 
 if yes?("Add authentication?")
