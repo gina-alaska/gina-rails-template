@@ -3,18 +3,29 @@ def source_paths
 end
 
 gem "haml"
-gem "bower-tools", github: "gina-alaska/bower-tools"
-gem "pg"
+gem "bower-rails"
+gem "stamp"
+gem "pry"
+gem "better_errors", group: :development
+gem "guard"
+gem "guard-minitest"
 
 if yes?("Add authentication?")
   apply 'authentication.rb'
 end
 
 run "bundle install"
-generate('bower:tools:install')
 
-run "bower install bootstrap"
-run "bower install font-awesome"
+generate('bower_rails:initialize')
+
+inject_into_file("Bowerfile", after: "# asset 'bootstrap'") do
+  '
+  asset "bootstrap"
+  asset "font-awesome"
+  '
+end
+
+rake "bower:install"
 
 inject_into_file("app/assets/javascripts/application.js", after: "//= require jquery_ujs\n") do
   "//= require bootstrap/dist/js/bootstrap\n"
