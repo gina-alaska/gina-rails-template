@@ -7,7 +7,7 @@ gem 'omniauth-github'
 gem "omniauth-google-oauth2"
 gem "omniauth-openid"
 gem 'google-api-client'
-run "bundle install"
+# run "bundle install"
 
 generate(:resource, "user", "name:string", "email:string", "avatar:string")
 generate(:model, "authorization", "provider:string", "uid:string", "user_id:integer")
@@ -33,24 +33,26 @@ inject_into_class "app/models/membership.rb",'Membership', "  include GinaAuthen
 route "resources :sessions"
 route "get '/auth/failure', to: 'sessions#failure'"
 route "get '/auth/:provider/callback', to: 'sessions#create'"
-route "post '/auth/:provider/callback', to: 'sessions#create'" 
+route "post '/auth/:provider/callback', to: 'sessions#create'"
 route "get '/auth/:provider/disable', to: 'users#disable_provider'"
 route "get '/login', to: 'sessions#new'"
 route "get '/logout', to: 'sessions#destroy'"
 
-initializer 'omniauth.rb', <<-CODE
-  require 'openid/store/filesystem'
+after_bundle do
+  initializer 'omniauth.rb', <<-CODE
+    require 'openid/store/filesystem'
 
-  Rails.application.config.middleware.use OmniAuth::Builder do
-    # provider :developer unless Rails.env.production?
-    # provider :google_oauth2, ENV["GOOGLE_KEY"], ENV["GOOGLE_SECRET"], {
-    #   name: "google",
-    #   scope: "userinfo.email, userinfo.profile",
-    #   image_aspect_ratio: "square",
-    #   image_size: 50# ,
-    #   prompt: 'consent'
-    # }
-    # provider :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
-    provider :openid, :store => OpenID::Store::Filesystem.new("./tmp"), :name => 'gina', :identifier => 'https://id.gina.alaska.edu'
-  end
-CODE
+    Rails.application.config.middleware.use OmniAuth::Builder do
+      # provider :developer unless Rails.env.production?
+      # provider :google_oauth2, ENV["GOOGLE_KEY"], ENV["GOOGLE_SECRET"], {
+      #   name: "google",
+      #   scope: "userinfo.email, userinfo.profile",
+      #   image_aspect_ratio: "square",
+      #   image_size: 50# ,
+      #   prompt: 'consent'
+      # }
+      # provider :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
+      provider :openid, :store => OpenID::Store::Filesystem.new("./tmp"), :name => 'gina', :identifier => 'https://id.gina.alaska.edu'
+    end
+  CODE
+end
