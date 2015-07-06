@@ -35,8 +35,8 @@ route "get '/auth/failure', to: 'sessions#failure'"
 route "get '/auth/:provider/callback', to: 'sessions#create'"
 route "post '/auth/:provider/callback', to: 'sessions#create'"
 route "get '/auth/:provider/disable', to: 'users#disable_provider'"
-route "get '/login', to: 'sessions#new'"
-route "get '/logout', to: 'sessions#destroy'"
+route "get '/signin', to: 'sessions#new', as: :signout"
+route "get '/signout', to: 'sessions#destroy', as: :signin"
 
 after_bundle do
   initializer 'omniauth.rb', <<-CODE

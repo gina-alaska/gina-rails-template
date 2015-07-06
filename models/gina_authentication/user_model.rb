@@ -1,7 +1,7 @@
 module GinaAuthentication
   module UserModel
     extend ActiveSupport::Concern
-    
+
     included do
       has_many :authorizations, dependent: :destroy
       has_one :membership
@@ -11,7 +11,7 @@ module GinaAuthentication
 
     def update_from_hash!(hash)
       update_attributes(self.class.params_from_hash(hash))
-  
+
       # attempt to associate with membership
       if self.membership.nil?
         membership = Membership.where(email: self.email).first
@@ -45,14 +45,14 @@ module GinaAuthentication
         # attempt to associate with membership
         membership = Membership.where(email: user.email).first
         user.membership = membership unless membership.nil?
-  
+
         user
-      end      
-      
+      end
+
       def params_from_hash(hash)
         info = {
-          name: hash['info']['name'], 
-          email: hash['info']['email'] 
+          name: hash['info']['name'],
+          email: hash['info']['email']
         }
         info.merge!({ avatar: hash['info']['image'] }) unless hash['info']['image'].blank?
         info
